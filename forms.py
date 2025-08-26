@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import StringField, TextAreaField, SelectField, IntegerField, HiddenField, PasswordField, SubmitField
+from wtforms import StringField, TextAreaField, SelectField, IntegerField, HiddenField, PasswordField, SubmitField, FloatField, DateTimeField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, NumberRange, Optional
 from wtforms.widgets import TextArea
 
@@ -66,3 +66,63 @@ class OrderStatusForm(FlaskForm):
                                widget=TextArea(),
                                render_kw={"rows": 3})
     submit = SubmitField('Update Order')
+
+# Enhanced Forms for New Features
+class TestimonialForm(FlaskForm):
+    customer_name = StringField('Customer Name', validators=[DataRequired(), Length(min=2, max=100)])
+    customer_title = StringField('Job Title', validators=[Optional(), Length(max=100)])
+    customer_company = StringField('Company', validators=[Optional(), Length(max=100)])
+    rating = SelectField('Rating', choices=[(5, '5 Stars'), (4, '4 Stars'), (3, '3 Stars'), (2, '2 Stars'), (1, '1 Star')], coerce=int, validators=[DataRequired()])
+    testimonial_text = TextAreaField('Testimonial', validators=[DataRequired(), Length(min=20, max=1000)], widget=TextArea(), render_kw={"rows": 4})
+    industry = StringField('Industry', validators=[Optional(), Length(max=100)])
+    service_used = StringField('Service Used', validators=[Optional(), Length(max=100)])
+    customer_photo = FileField('Customer Photo (Optional)', validators=[Optional(), FileAllowed(['jpg', 'jpeg', 'png'], 'Only JPG and PNG images allowed')])
+    featured = BooleanField('Featured Testimonial')
+    approved = BooleanField('Approved for Display')
+    submit = SubmitField('Save Testimonial')
+
+class FAQForm(FlaskForm):
+    question = StringField('Question', validators=[DataRequired(), Length(min=10, max=500)])
+    answer = TextAreaField('Answer', validators=[DataRequired(), Length(min=20, max=2000)], widget=TextArea(), render_kw={"rows": 5})
+    category = SelectField('Category', choices=[('general', 'General'), ('pricing', 'Pricing'), ('process', 'Process'), ('delivery', 'Delivery'), ('revisions', 'Revisions')], validators=[DataRequired()])
+    order_index = IntegerField('Display Order', validators=[Optional(), NumberRange(min=0)], default=0)
+    active = BooleanField('Active', default=True)
+    submit = SubmitField('Save FAQ')
+
+class DiscountCodeForm(FlaskForm):
+    code = StringField('Discount Code', validators=[DataRequired(), Length(min=3, max=50)])
+    description = StringField('Description', validators=[Optional(), Length(max=200)])
+    discount_type = SelectField('Discount Type', choices=[('percentage', 'Percentage'), ('fixed', 'Fixed Amount')], validators=[DataRequired()])
+    discount_value = FloatField('Discount Value', validators=[DataRequired(), NumberRange(min=0)])
+    minimum_order = FloatField('Minimum Order Amount', validators=[Optional(), NumberRange(min=0)], default=0)
+    maximum_uses = IntegerField('Maximum Uses (Optional)', validators=[Optional(), NumberRange(min=1)])
+    active = BooleanField('Active', default=True)
+    submit = SubmitField('Save Discount Code')
+
+class ReferralForm(FlaskForm):
+    referrer_name = StringField('Your Name', validators=[DataRequired(), Length(min=2, max=100)])
+    referrer_email = StringField('Your Email', validators=[DataRequired(), Email()])
+    referred_name = StringField('Friend\'s Name', validators=[DataRequired(), Length(min=2, max=100)])
+    referred_email = StringField('Friend\'s Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Send Referral')
+
+class NewsletterForm(FlaskForm):
+    email = StringField('Email Address', validators=[DataRequired(), Email()])
+    name = StringField('Name (Optional)', validators=[Optional(), Length(max=100)])
+    submit = SubmitField('Subscribe')
+
+class LiveChatForm(FlaskForm):
+    customer_name = StringField('Your Name', validators=[Optional(), Length(max=100)])
+    customer_email = StringField('Email (Optional)', validators=[Optional(), Email()])
+    message = TextAreaField('Message', validators=[DataRequired(), Length(min=5, max=500)], widget=TextArea(), render_kw={"rows": 3})
+    submit = SubmitField('Send Message')
+
+class AdminResponseForm(FlaskForm):
+    admin_response = TextAreaField('Response', validators=[DataRequired(), Length(min=10, max=2000)], widget=TextArea(), render_kw={"rows": 4})
+    priority = SelectField('Priority', choices=[('low', 'Low'), ('normal', 'Normal'), ('high', 'High'), ('urgent', 'Urgent')], default='normal')
+    responded = BooleanField('Mark as Responded')
+    submit = SubmitField('Send Response')
+
+class DiscountApplicationForm(FlaskForm):
+    discount_code = StringField('Discount Code', validators=[Optional(), Length(max=50)])
+    submit = SubmitField('Apply Discount')

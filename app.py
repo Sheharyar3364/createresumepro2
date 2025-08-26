@@ -5,8 +5,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
+from flask_caching import Cache
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from sqlalchemy.orm import DeclarativeBase
 from werkzeug.middleware.proxy_fix import ProxyFix
+import redis
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -18,6 +22,8 @@ db = SQLAlchemy(model_class=Base)
 login_manager = LoginManager()
 mail = Mail()
 csrf = CSRFProtect()
+cache = Cache()
+limiter = Limiter(key_func=get_remote_address)
 
 def create_app():
     app = Flask(__name__)
@@ -52,11 +58,33 @@ def create_app():
     app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_SECRET_KEY")
     app.config["STRIPE_PUBLISHABLE_KEY"] = os.environ.get("STRIPE_PUBLISHABLE_KEY")
     
+    # Redis and Caching configuration
+    redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+    app.config["CACHE_TYPE"] = "RedisCache"
+    app.config["CACHE_REDIS_URL"] = redis_url
+    app.config["CACHE_DEFAULT_TIMEOUT"] = 300
+    
+    # Rate limiting configuration
+    app.config["RATELIMIT_STORAGE_URL"] = redis_url
+    app.config["RATELIMIT_DEFAULT"] = "100 per hour"
+    
+    # Session configuration
+    app.config["PERMANENT_SESSION_LIFETIME"] = 86400  # 24 hours
+    
+    # Feature flags
+    app.config["ENABLE_TESTIMONIALS"] = True
+    app.config["ENABLE_PORTFOLIO"] = True
+    app.config["ENABLE_LIVE_CHAT"] = True
+    app.config["ENABLE_REFERRALS"] = True
+    app.config["ENABLE_ANALYTICS"] = True
+    
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
     csrf.init_app(app)
+    cache.init_app(app)
+    limiter.init_app(app)
     
     # Login manager configuration
     login_manager.login_view = "admin_login"  # type: ignore

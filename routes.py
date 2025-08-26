@@ -1,14 +1,25 @@
 import os
 import stripe
-from datetime import datetime
-from flask import render_template, request, redirect, url_for, flash, send_file, jsonify, current_app
+import json
+import uuid
+from datetime import datetime, timedelta
+from flask import render_template, request, redirect, url_for, flash, send_file, jsonify, current_app, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from flask_mail import Message
-from app import db, mail
-from models import Admin, Service, Order, ContactMessage
-from forms import OrderForm, ContactForm, AdminLoginForm, OrderStatusForm
+from sqlalchemy import func, desc
+from app import db, mail, cache, limiter
+from models import (Admin, Service, Order, ContactMessage, Testimonial, FAQ, 
+                   Portfolio, DiscountCode, Referral, OrderTracking, Template,
+                   NewsletterSubscriber, LiveChat, ChatMessage, Analytics, OrderDiscount)
+from forms import (OrderForm, ContactForm, AdminLoginForm, OrderStatusForm,
+                  TestimonialForm, FAQForm, DiscountCodeForm, ReferralForm,
+                  NewsletterForm, LiveChatForm, AdminResponseForm, DiscountApplicationForm)
+from utils import (track_event, validate_discount_code, apply_discount_to_order,
+                  save_uploaded_file, calculate_estimated_delivery, generate_referral_code,
+                  generate_session_id, format_price, get_service_features_list,
+                  log_user_action, send_admin_notification_email)
 
 def register_routes(app):
     
@@ -16,11 +27,163 @@ def register_routes(app):
     @app.before_request
     def set_stripe_key():
         stripe.api_key = current_app.config.get('STRIPE_SECRET_KEY')
+        # Set user session for analytics
+        if 'user_id' not in session:
+            session['user_id'] = str(uuid.uuid4())
     
     @app.route('/')
+    @cache.cached(timeout=300)  # Cache for 5 minutes
     def index():
+        track_event('page_view', {'page': 'home'})
         services = Service.query.filter_by(active=True).all()
-        return render_template('index.html', services=services)
+        testimonials = Testimonial.query.filter_by(featured=True, approved=True).limit(6).all()
+        portfolio_items = Portfolio.query.filter_by(featured=True, active=True).limit(4).all()
+        faqs = FAQ.query.filter_by(active=True).order_by(FAQ.order_index.asc()).limit(5).all()
+        return render_template('index.html', services=services, testimonials=testimonials, 
+                             portfolio_items=portfolio_items, faqs=faqs)
+
+    # New Enhanced Routes
+    @app.route('/testimonials')
+    @cache.cached(timeout=600)
+    def testimonials():
+        track_event('page_view', {'page': 'testimonials'})
+        page = request.args.get('page', 1, type=int)
+        industry_filter = request.args.get('industry', 'all')
+        rating_filter = request.args.get('rating', 'all', type=str)
+        
+        query = Testimonial.query.filter_by(approved=True)
+        if industry_filter != 'all':
+            query = query.filter(Testimonial.industry == industry_filter)
+        if rating_filter != 'all':
+            query = query.filter(Testimonial.rating >= int(rating_filter))
+        
+        testimonials = query.order_by(desc(Testimonial.created_at)).paginate(
+            page=page, per_page=12, error_out=False
+        )
+        
+        industries = db.session.query(Testimonial.industry).distinct().filter(
+            Testimonial.industry.isnot(None), Testimonial.approved == True
+        ).all()
+        industries = [i[0] for i in industries if i[0]]
+        
+        return render_template('testimonials.html', testimonials=testimonials,
+                             industries=industries, current_industry=industry_filter,
+                             current_rating=rating_filter)
+    
+    @app.route('/faq')
+    @cache.cached(timeout=600)
+    def faq():
+        track_event('page_view', {'page': 'faq'})
+        category_filter = request.args.get('category', 'all')
+        
+        query = FAQ.query.filter_by(active=True)
+        if category_filter != 'all':
+            query = query.filter(FAQ.category == category_filter)
+            
+        faqs = query.order_by(FAQ.order_index.asc(), FAQ.created_at.desc()).all()
+        
+        faq_categories = {}
+        for faq_item in faqs:
+            if faq_item.category not in faq_categories:
+                faq_categories[faq_item.category] = []
+            faq_categories[faq_item.category].append(faq_item)
+        
+        categories = ['general', 'pricing', 'process', 'delivery', 'revisions']
+        
+        return render_template('faq.html', faq_categories=faq_categories,
+                             categories=categories, current_category=category_filter)
+
+    @app.route('/track-order')
+    def track_order():
+        order_id = request.args.get('order_id')
+        email = request.args.get('email')
+        
+        if not order_id or not email:
+            return render_template('track_order.html')
+        
+        order = Order.query.filter_by(id=order_id, email=email).first()
+        if not order:
+            flash('Order not found. Please check your order ID and email.', 'error')
+            return render_template('track_order.html')
+        
+        tracking_updates = OrderTracking.query.filter_by(order_id=order.id).order_by(
+            OrderTracking.created_at.desc()).all()
+        
+        track_event('order_tracked', {'order_id': order.id})
+        
+        return render_template('track_order.html', order=order, tracking_updates=tracking_updates)
+
+    @app.route('/refer', methods=['GET', 'POST'])
+    def refer_friend():
+        form = ReferralForm()
+        
+        if form.validate_on_submit():
+            existing = Referral.query.filter_by(
+                referrer_email=form.referrer_email.data,
+                referred_email=form.referred_email.data
+            ).first()
+            
+            if existing:
+                flash('You have already referred this person!', 'warning')
+                return render_template('referral.html', form=form)
+            
+            referral_code = generate_referral_code()
+            referral = Referral(
+                referrer_email=form.referrer_email.data,
+                referrer_name=form.referrer_name.data,
+                referred_email=form.referred_email.data,
+                referred_name=form.referred_name.data,
+                referral_code=referral_code,
+                reward_amount=25.0
+            )
+            
+            db.session.add(referral)
+            db.session.commit()
+            
+            try:
+                send_referral_emails(referral)
+                flash('Referral sent successfully! Your friend will receive an email with your special offer.', 'success')
+                track_event('referral_sent', {'referral_code': referral_code})
+            except Exception as e:
+                current_app.logger.error(f"Referral email error: {e}")
+                flash('Referral created but email could not be sent. Please contact support.', 'warning')
+            
+            return redirect(url_for('refer_friend'))
+        
+        return render_template('referral.html', form=form)
+
+    @app.route('/newsletter-signup', methods=['POST'])
+    @limiter.limit("5 per hour")
+    def newsletter_signup():
+        form = NewsletterForm()
+        
+        if form.validate_on_submit():
+            existing = NewsletterSubscriber.query.filter_by(email=form.email.data).first()
+            
+            if existing:
+                if not existing.active:
+                    existing.active = True
+                    db.session.commit()
+                    flash('Welcome back! You have been re-subscribed to our newsletter.', 'success')
+                else:
+                    flash('You are already subscribed to our newsletter!', 'info')
+            else:
+                subscriber = NewsletterSubscriber(
+                    email=form.email.data,
+                    name=form.name.data
+                )
+                db.session.add(subscriber)
+                db.session.commit()
+                
+                try:
+                    send_newsletter_welcome_email(subscriber)
+                except Exception as e:
+                    current_app.logger.error(f"Newsletter welcome email error: {e}")
+                
+                flash('Thank you for subscribing! Check your email for a welcome message.', 'success')
+                track_event('newsletter_signup', {'email': form.email.data})
+        
+        return redirect(request.referrer or url_for('index'))
     
     @app.route('/order')
     def order():
@@ -475,3 +638,87 @@ The CreateProResume Team
     
     mail.send(msg)
     mail.send(reply_msg)
+
+# New Enhanced Email Functions
+def send_referral_emails(referral):
+    """Send referral emails to both referrer and referred person"""
+    if not mail:
+        return
+    
+    # Email to referred person
+    referred_msg = Message(
+        subject=f'{referral.referrer_name} referred you to CreateProResume - Get $25 Off!',
+        recipients=[referral.referred_email]
+    )
+    
+    referred_msg.body = f"""
+Hi {referral.referred_name or 'there'}!
+
+Great news! {referral.referrer_name} has referred you to CreateProResume and you'll receive $25 off your first order!
+
+Use referral code: {referral.referral_code}
+
+CreateProResume offers professional resume writing services that help you land your dream job. Our expert writers create ATS-optimized resumes that get noticed by employers.
+
+Ready to get started? Visit: {url_for('order', ref=referral.referral_code, _external=True)}
+
+This offer is valid for 30 days from today.
+
+Best regards,
+The CreateProResume Team
+"""
+    
+    # Email to referrer
+    referrer_msg = Message(
+        subject='Thank you for referring a friend to CreateProResume!',
+        recipients=[referral.referrer_email]
+    )
+    
+    referrer_msg.body = f"""
+Hi {referral.referrer_name}!
+
+Thank you for referring {referral.referred_name} to CreateProResume! 
+
+We've sent them a special offer for $25 off their first order. When they complete their order using referral code {referral.referral_code}, you'll receive a $25 credit that can be used towards your next order.
+
+Keep spreading the word - there's no limit to how many friends you can refer!
+
+Best regards,
+The CreateProResume Team
+"""
+    
+    mail.send(referred_msg)
+    mail.send(referrer_msg)
+
+def send_newsletter_welcome_email(subscriber):
+    """Send welcome email to newsletter subscriber"""
+    if not mail:
+        return
+    
+    msg = Message(
+        subject='Welcome to CreateProResume Newsletter!',
+        recipients=[subscriber.email]
+    )
+    
+    msg.body = f"""
+Hi {subscriber.name or 'there'}!
+
+Welcome to the CreateProResume newsletter! You'll now receive:
+
+• Career tips and job search strategies
+• Resume writing best practices  
+• Industry insights and trends
+• Exclusive offers and discounts
+• Success stories from our clients
+
+As a welcome gift, here's a 10% discount code for your first order: WELCOME10
+
+Ready to transform your career? Visit: {url_for('index', _external=True)}
+
+Best regards,
+The CreateProResume Team
+
+P.S. You can unsubscribe at any time by clicking the link in our emails.
+"""
+    
+    mail.send(msg)

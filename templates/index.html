@@ -252,6 +252,177 @@
     </div>
 </section>
 
+<!-- Featured Testimonials -->
+{% if testimonials %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Client Success Stories</h2>
+            <p class="lead text-muted">See what our clients say about their career transformations</p>
+        </div>
+        
+        <div class="row">
+            {% for testimonial in testimonials[:3] %}
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            {% for i in range(testimonial.rating) %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                        <blockquote class="mb-3">"{{ testimonial.testimonial_text[:150] }}{% if testimonial.testimonial_text|length > 150 %}...{% endif %}"</blockquote>
+                        <div class="d-flex align-items-center justify-content-center">
+                            {% if testimonial.customer_photo %}
+                            <img src="{{ url_for('static', filename='uploads/' + testimonial.customer_photo) }}" 
+                                 alt="{{ testimonial.customer_name }}" 
+                                 class="rounded-circle me-3" width="50" height="50" style="object-fit: cover;">
+                            {% else %}
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                 style="width: 50px; height: 50px;">
+                                <span class="text-white fw-bold">{{ testimonial.customer_name[0] }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="text-start">
+                                <h6 class="mb-0">{{ testimonial.customer_name }}</h6>
+                                {% if testimonial.customer_title %}
+                                <small class="text-muted">{{ testimonial.customer_title }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('testimonials') }}" class="btn btn-outline-primary">View All Success Stories</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Portfolio Showcase -->
+{% if portfolio_items %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Resume Transformations</h2>
+            <p class="lead text-muted">See the before and after examples of our professional work</p>
+        </div>
+        
+        <div class="row">
+            {% for item in portfolio_items[:4] %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if item.after_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + item.after_image) }}" 
+                         class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ item.title }}</h6>
+                        <p class="card-text small text-muted">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</p>
+                        {% if item.industry %}
+                        <span class="badge bg-light text-dark small">{{ item.industry }}</span>
+                        {% endif %}
+                        {% if item.job_level %}
+                        <span class="badge bg-primary small">{{ item.job_level.title() }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- FAQ Section -->
+{% if faqs %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Frequently Asked Questions</h2>
+            <p class="lead text-muted">Quick answers to common questions about our services</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    {% for faq in faqs %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq-{{ faq.id }}">
+                            <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" 
+                                    type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse-{{ faq.id }}" 
+                                    aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" 
+                                    aria-controls="collapse-{{ faq.id }}">
+                                {{ faq.question }}
+                            </button>
+                        </h2>
+                        <div id="collapse-{{ faq.id }}" 
+                             class="accordion-collapse collapse {% if loop.first %}show{% endif %}" 
+                             aria-labelledby="faq-{{ faq.id }}" 
+                             data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                {{ faq.answer | safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('faq') }}" class="btn btn-outline-primary">View All FAQs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Referral Program -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bold mb-3">Refer a Friend & Earn $25</h2>
+                <p class="lead mb-4">Help your friends advance their careers and earn rewards! Both you and your friend get $25 when they complete their order.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ url_for('refer_friend') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-user-friends me-2"></i>Refer Now
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Signup -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-6">
+                <h3 class="mb-3">Stay Updated with Career Tips</h3>
+                <p class="mb-4">Get exclusive job search strategies, resume tips, and special offers delivered to your inbox.</p>
+                
+                <form method="POST" action="{{ url_for('newsletter_signup') }}" class="row g-2">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="col-md-8">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+                    </div>
+                </form>
+                
+                <small class="text-muted mt-2 d-block">Join 1000+ professionals already subscribed. Unsubscribe anytime.</small>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- CTA Section -->
 <section class="py-5 bg-primary text-white">
     <div class="container">
