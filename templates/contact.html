@@ -3,6 +3,7 @@
 {% block title %}Contact Us - CreateProResume{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <!-- Contact Hero -->
 <section class="py-5 bg-primary text-white">
     <div class="container">
@@ -212,6 +213,136 @@
                                 <div class="accordion-body">
                                     Yes, we can often accommodate rush orders depending on our current workload. Contact us directly to discuss expedited options and any additional fees that may apply.
                                 </div>
+=======
+<div class="container my-5 contact">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-dark mb-3">Contact Us</h1>
+                <p class="lead text-muted">Have questions about our services? We're here to help you succeed in your career journey.</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Contact Form -->
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="fw-bold mb-0">
+                                <i class="fas fa-envelope me-2"></i>Send us a Message
+                            </h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="POST">
+                                {{ form.hidden_tag() }}
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.name.label(class="form-label fw-bold") }}
+                                        {{ form.name(class="form-control") }}
+                                        {% if form.name.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {% for error in form.name.errors %}{{ error }}{% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.email.label(class="form-label fw-bold") }}
+                                        {{ form.email(class="form-control") }}
+                                        {% if form.email.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {% for error in form.email.errors %}{{ error }}{% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    {{ form.subject.label(class="form-label fw-bold") }}
+                                    {{ form.subject(class="form-control") }}
+                                    {% if form.subject.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.subject.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-4">
+                                    {{ form.message.label(class="form-label fw-bold") }}
+                                    {{ form.message(class="form-control") }}
+                                    {% if form.message.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.message.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                {{ form.submit(class="btn btn-primary btn-lg w-100") }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Get in Touch</h5>
+                            
+                            <div class="contact-item mb-4">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="contact-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0">Email</h6>
+                                </div>
+                                <p class="text-muted mb-0 ms-5">
+                                    <a href="mailto:info@createproresume.com" class="text-decoration-none">
+                                        info@createproresume.com
+                                    </a>
+                                </p>
+                                <p class="text-muted mb-0 ms-5">
+                                    <a href="mailto:support@createproresume.com" class="text-decoration-none">
+                                        support@createproresume.com
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            <div class="contact-item mb-4">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="contact-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0">Phone</h6>
+                                </div>
+                                <p class="text-muted mb-0 ms-5">
+                                    <a href="tel:+15551234567" class="text-decoration-none">
+                                        (555) 123-4567
+                                    </a>
+                                </p>
+                                <small class="text-muted ms-5">Mon-Fri 9AM-6PM EST</small>
+                            </div>
+                            
+                            <div class="contact-item mb-4">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="contact-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0">Response Time</h6>
+                                </div>
+                                <p class="text-muted mb-0 ms-5">Within 24 hours</p>
+                                <small class="text-muted ms-5">Usually much faster!</small>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="contact-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0">Support</h6>
+                                </div>
+                                <p class="text-muted mb-0 ms-5">Free consultation and unlimited revisions</p>
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d
                             </div>
                         </div>
                     </div>
@@ -220,4 +351,89 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+=======
+
+<!-- FAQ Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold text-dark mb-3">Frequently Asked Questions</h2>
+                    <p class="text-muted">Quick answers to common questions about our services</p>
+                </div>
+                
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item border-0 shadow-sm mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How long does it take to complete my resume?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Most resumes are completed within 3-5 business days. Premium packages include rush delivery options (1-2 days) for urgent needs. You'll receive email updates throughout the process.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item border-0 shadow-sm mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What if I'm not satisfied with my resume?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We offer unlimited revisions until you're completely satisfied. Our goal is to create a resume that exceeds your expectations and helps you land your dream job.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item border-0 shadow-sm mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Do you write resumes for all industries?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes! Our expert writers have experience across all major industries including technology, healthcare, finance, education, marketing, and more. We customize each resume for your specific field.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item border-0 shadow-sm mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Are your resumes ATS-friendly?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Absolutely! All our resumes are optimized for Applicant Tracking Systems (ATS) with proper formatting, relevant keywords, and industry-standard structure to ensure they pass initial screenings.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item border-0 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                What payment methods do you accept?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We accept all major credit cards and debit cards through our secure Stripe payment system. Your payment information is encrypted and never stored on our servers.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d
 {% endblock %}

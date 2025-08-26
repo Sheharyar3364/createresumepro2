@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+
+{% block title %}Track Your Order - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="text-center mb-5">Track Your Order</h1>
+            
+            {% if not order %}
+            <!-- Order Lookup Form -->
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form method="GET" action="{{ url_for('track_order') }}">
+                        <div class="mb-3">
+                            <label for="order_id" class="form-label">Order ID</label>
+                            <input type="text" class="form-control" id="order_id" name="order_id" 
+                                   placeholder="Enter your order number (e.g., 12345)" required
+                                   value="{{ request.args.get('order_id', '') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="Enter the email used for your order" required
+                                   value="{{ request.args.get('email', '') }}">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Track Order</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <!-- Order Status Display -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Order #{{ order.id }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Customer Information</h6>
+                            <p class="mb-1"><strong>Name:</strong> {{ order.full_name }}</p>
+                            <p class="mb-1"><strong>Email:</strong> {{ order.email }}</p>
+                            <p class="mb-1"><strong>Phone:</strong> {{ order.phone or 'Not provided' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Order Information</h6>
+                            <p class="mb-1"><strong>Service:</strong> {{ order.service.name }}</p>
+                            <p class="mb-1"><strong>Package:</strong> {{ order.service_tier.title() }}</p>
+                            <p class="mb-1"><strong>Amount:</strong> ${{ "%.2f"|format(order.total_amount) }}</p>
+                            <p class="mb-1"><strong>Order Date:</strong> {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Current Status</h6>
+                            <span class="badge bg-{{ order.status_badge_class }} fs-6">{{ order.status.replace('_', ' ').title() }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Payment Status</h6>
+                            <span class="badge bg-{{ order.payment_status_badge_class }} fs-6">{{ order.payment_status.title() }}</span>
+                        </div>
+                    </div>
+                    
+                    {% if order.target_position %}
+                    <hr>
+                    <h6>Target Position</h6>
+                    <p>{{ order.target_position }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Progress Timeline -->
+            {% if tracking_updates %}
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Progress</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for update in tracking_updates %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">{{ update.status.replace('_', ' ').title() }}</h6>
+                                <p class="text-muted mb-1">{{ update.description }}</p>
+                                <small class="text-muted">{{ update.created_at.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                                {% if update.estimated_completion %}
+                                <br><small class="text-info">Estimated completion: {{ update.estimated_completion.strftime('%B %d, %Y') }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Contact Information -->
+            <div class="card shadow mt-4">
+                <div class="card-body text-center">
+                    <h6>Need Help with Your Order?</h6>
+                    <p class="text-muted mb-3">Our customer support team is here to assist you.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ url_for('contact') }}" class="btn btn-outline-primary">Contact Support</a>
+                        <a href="mailto:support@createproresume.com" class="btn btn-outline-secondary">Email Us</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -18px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #007bff;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid #007bff;
+}
+</style>
+{% endblock %}

@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 # This file ensures the uploads directory is created and tracked by Git
 # Customer uploaded files (resumes, cover letters, job descriptions) are stored here
+=======
+# This file ensures the uploads directory is created in version control
+# Uploaded files will be stored in this directory
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d

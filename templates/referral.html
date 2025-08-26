@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+
+{% block title %}Refer a Friend - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="referral-hero bg-gradient-success text-white py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">Refer a Friend & Earn $25</h1>
+                <p class="lead mb-0">Help your friends advance their careers and earn rewards for yourself!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- How It Works -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="text-center mb-5">How It Works</h2>
+            <div class="row">
+                <div class="col-md-4 text-center mb-4">
+                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user-friends fa-2x"></i>
+                    </div>
+                    <h5>1. Refer Your Friend</h5>
+                    <p class="text-muted">Fill out the form below with your friend's details and we'll send them a special offer.</p>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                    </div>
+                    <h5>2. They Place an Order</h5>
+                    <p class="text-muted">Your friend gets $25 off their first resume writing service using their referral code.</p>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-gift fa-2x"></i>
+                    </div>
+                    <h5>3. You Earn $25</h5>
+                    <p class="text-muted">Once their order is complete, you receive a $25 credit towards your next service.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Form -->
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Send a Referral</h3>
+                    
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Your Information -->
+                        <h5 class="mb-3">Your Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                {{ form.referrer_name.label(class="form-label") }}
+                                {{ form.referrer_name(class="form-control") }}
+                                {% for error in form.referrer_name.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.referrer_email.label(class="form-label") }}
+                                {{ form.referrer_email(class="form-control") }}
+                                {% for error in form.referrer_email.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Friend's Information -->
+                        <h5 class="mb-3">Friend's Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                {{ form.referred_name.label(class="form-label") }}
+                                {{ form.referred_name(class="form-control") }}
+                                {% for error in form.referred_name.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.referred_email.label(class="form-label") }}
+                                {{ form.referred_email(class="form-control") }}
+                                {% for error in form.referred_email.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Benefits -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h4 class="card-title">Referral Program Benefits</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Your friend gets $25 off their first order</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> You earn $25 credit when they complete their order</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> No limit on how many friends you can refer</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Credits never expire</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Help your friends advance their careers</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h5>Terms & Conditions</h5>
+                <small class="text-muted">
+                    • Referral credits are applied after the referred customer's order is completed.<br>
+                    • Only new customers are eligible for the referral discount.<br>
+                    • Referral codes are valid for 30 days from the date sent.<br>
+                    • Credits can be used towards any CreateProResume service.<br>
+                    • CreateProResume reserves the right to modify or discontinue this program at any time.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

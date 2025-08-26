@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 modules = ["python-3.11", "postgresql-16"]
+=======
+modules = ["python-3.11"]
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d
 
 [nix]
 channel = "stable-25_05"
@@ -34,4 +38,8 @@ localPort = 5000
 externalPort = 80
 
 [agent]
+<<<<<<< HEAD
 integrations = ["styling_replit==1.0.0", "python_database==1.0.0", "flask_stripe==1.0.0"]
+=======
+integrations = ["python_database==1.0.0", "python_log_in_with_replit==1.0.0", "twilio_send_message==1.0.0", "flask_stripe==1.0.0", "web_scraper==1.0.0", "python_sendgrid==1.0.0", "python_openai==1.0.0", "python_notion==1.0.0"]
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d

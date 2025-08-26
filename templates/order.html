@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block title %}Place Your Order - CreateProResume{% endblock %}
+
+{% block extra_head %}
+<style>
+.step-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    color: #6c757d;
+    font-weight: bold;
+    position: relative;
+}
+
+.step.active {
+    background-color: #1E40AF;
+    color: white;
+}
+
+.step-connector {
+    flex: 1;
+    height: 2px;
+    background-color: #e9ecef;
+    margin: 0 1rem;
+}
+
+.step-connector.active {
+    background-color: #1E40AF;
+}
+
+.pricing-summary {
+    background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover {
+    border-color: #1E40AF;
+    background-color: #f8f9fa;
+}
+
+.file-upload-area.dragover {
+    border-color: #1E40AF;
+    background-color: #e3f2fd;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Step Indicator -->
+            <div class="step-indicator justify-content-center">
+                <div class="step active">1</div>
+                <div class="step-connector"></div>
+                <div class="step">2</div>
+                <div class="step-connector"></div>
+                <div class="step">3</div>
+            </div>
+            
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-dark mb-3">Start Your Career Transformation</h1>
+                <p class="lead text-muted">Fill out the form below and our expert writers will create your professional documents</p>
+            </div>
+
+            <!-- Pricing Summary -->
+            <div class="pricing-summary">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="fw-bold mb-2">Selected Service & Pricing</h4>
+                        <p class="mb-0" id="service-summary">Select a service and tier to see pricing</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div class="display-6 fw-bold" id="price-display">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Form -->
+            <form method="POST" action="{{ url_for('submit_order') }}" enctype="multipart/form-data" id="orderForm">
+                {{ form.hidden_tag() }}
+                
+                <!-- Service Selection -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="fw-bold mb-0"><i class="fas fa-clipboard-list me-2"></i>Service Selection</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.service_id.label(class="form-label fw-bold") }}
+                                {{ form.service_id(class="form-select", id="serviceSelect") }}
+                                {% if form.service_id.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.service_id.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.service_tier.label(class="form-label fw-bold") }}
+                                {{ form.service_tier(class="form-select", id="tierSelect") }}
+                                {% if form.service_tier.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.service_tier.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="fw-bold mb-0"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.first_name.label(class="form-label fw-bold") }}
+                                {{ form.first_name(class="form-control") }}
+                                {% if form.first_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.first_name.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.last_name.label(class="form-label fw-bold") }}
+                                {{ form.last_name(class="form-control") }}
+                                {% if form.last_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.last_name.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.email.label(class="form-label fw-bold") }}
+                                {{ form.email(class="form-control") }}
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.email.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.phone.label(class="form-label fw-bold") }}
+                                {{ form.phone(class="form-control") }}
+                                {% if form.phone.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.phone.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Information -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="fw-bold mb-0"><i class="fas fa-briefcase me-2"></i>Career Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.current_position.label(class="form-label fw-bold") }}
+                                {{ form.current_position(class="form-control") }}
+                                {% if form.current_position.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.current_position.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.target_position.label(class="form-label fw-bold") }}
+                                {{ form.target_position(class="form-control") }}
+                                {% if form.target_position.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.target_position.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.industry.label(class="form-label fw-bold") }}
+                                {{ form.industry(class="form-control") }}
+                                {% if form.industry.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.industry.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.experience_years.label(class="form-label fw-bold") }}
+                                {{ form.experience_years(class="form-control") }}
+                                {% if form.experience_years.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.experience_years.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.career_goals.label(class="form-label fw-bold") }}
+                            {{ form.career_goals(class="form-control") }}
+                            {% if form.career_goals.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.career_goals.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.special_requirements.label(class="form-label fw-bold") }}
+                            {{ form.special_requirements(class="form-control") }}
+                            {% if form.special_requirements.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.special_requirements.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Uploads -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="fw-bold mb-0"><i class="fas fa-cloud-upload-alt me-2"></i>Document Uploads</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-4">Upload any existing documents to help our writers understand your background (all optional)</p>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.current_resume.label(class="form-label fw-bold") }}
+                                <div class="file-upload-area">
+                                    <i class="fas fa-file-pdf fa-2x text-muted mb-2"></i>
+                                    {{ form.current_resume(class="form-control") }}
+                                    <small class="text-muted">PDF, DOC, DOCX (Max 16MB)</small>
+                                </div>
+                                {% if form.current_resume.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.current_resume.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                {{ form.cover_letter.label(class="form-label fw-bold") }}
+                                <div class="file-upload-area">
+                                    <i class="fas fa-file-alt fa-2x text-muted mb-2"></i>
+                                    {{ form.cover_letter(class="form-control") }}
+                                    <small class="text-muted">PDF, DOC, DOCX (Max 16MB)</small>
+                                </div>
+                                {% if form.cover_letter.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.cover_letter.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                {{ form.job_description.label(class="form-label fw-bold") }}
+                                <div class="file-upload-area">
+                                    <i class="fas fa-file-text fa-2x text-muted mb-2"></i>
+                                    {{ form.job_description(class="form-control") }}
+                                    <small class="text-muted">PDF, DOC, DOCX, TXT (Max 16MB)</small>
+                                </div>
+                                {% if form.job_description.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.job_description.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary & Submit -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center py-4">
+                        <h5 class="fw-bold mb-3">Ready to transform your career?</h5>
+                        <p class="text-muted mb-4">Click below to proceed to secure payment via Stripe</p>
+                        {{ form.submit(class="btn btn-primary btn-lg px-5") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Service pricing data
+const servicePricing = {
+    {% for service in services %}
+    {{ service.id }}: {
+        name: "{{ service.name }}",
+        basic: {{ service.price_basic }},
+        standard: {{ service.price_standard }},
+        premium: {{ service.price_premium }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+};
+
+function updatePricing() {
+    const serviceId = document.getElementById('serviceSelect').value;
+    const tier = document.getElementById('tierSelect').value;
+    
+    if (serviceId && tier && servicePricing[serviceId]) {
+        const service = servicePricing[serviceId];
+        const price = service[tier];
+        
+        document.getElementById('service-summary').textContent = 
+            `${service.name} - ${tier.charAt(0).toUpperCase() + tier.slice(1)} Package`;
+        document.getElementById('price-display').textContent = `$${price}`;
+    } else {
+        document.getElementById('service-summary').textContent = 
+            'Select a service and tier to see pricing';
+        document.getElementById('price-display').textContent = '$0';
+    }
+}
+
+// Update pricing when selections change
+document.getElementById('serviceSelect').addEventListener('change', updatePricing);
+document.getElementById('tierSelect').addEventListener('change', updatePricing);
+
+// Initialize pricing on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updatePricing();
+});
+
+// File upload styling
+document.querySelectorAll('input[type="file"]').forEach(function(input) {
+    input.addEventListener('change', function() {
+        const uploadArea = this.closest('.file-upload-area');
+        if (this.files.length > 0) {
+            uploadArea.classList.add('has-file');
+            uploadArea.style.borderColor = '#10B981';
+            uploadArea.style.backgroundColor = '#f0fdf4';
+        } else {
+            uploadArea.classList.remove('has-file');
+            uploadArea.style.borderColor = '';
+            uploadArea.style.backgroundColor = '';
+        }
+    });
+});
+
+// Drag and drop functionality
+document.querySelectorAll('.file-upload-area').forEach(function(area) {
+    area.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    
+    area.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
+    
+    area.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        
+        const input = this.querySelector('input[type="file"]');
+        if (input && e.dataTransfer.files.length > 0) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        }
+    });
+});
+</script>
+{% endblock %}

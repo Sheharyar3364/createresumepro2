@@ -3,6 +3,7 @@
 {% block title %}Payment Cancelled - CreateProResume{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -180,6 +181,106 @@
                             <i class="fas fa-shield-alt text-primary fa-2x mb-2"></i>
                             <h6>Satisfaction Guaranteed</h6>
                             <p class="text-muted small">Multiple revisions until you're completely satisfied</p>
+=======
+<div class="container">
+    <div class="row justify-content-center" style="min-height: 70vh;">
+        <div class="col-lg-8 col-xl-6 d-flex align-items-center">
+            <div class="card border-0 shadow-lg w-100">
+                <div class="card-body text-center p-5">
+                    <!-- Cancel Icon -->
+                    <div class="cancel-icon mb-4">
+                        <i class="fas fa-times-circle fa-5x text-warning"></i>
+                    </div>
+                    
+                    <h1 class="display-5 fw-bold text-warning mb-3">Payment Cancelled</h1>
+                    <p class="lead text-muted mb-4">Your payment was cancelled and no charges were made to your account.</p>
+                    
+                    {% if order %}
+                    <!-- Order Information -->
+                    <div class="bg-light rounded p-4 mb-4">
+                        <h5 class="fw-bold mb-3">Order Information</h5>
+                        <div class="row text-start">
+                            <div class="col-sm-6 mb-2">
+                                <strong>Order ID:</strong> #{{ order.id }}
+                            </div>
+                            <div class="col-sm-6 mb-2">
+                                <strong>Service:</strong> {{ order.service.name }}
+                            </div>
+                            <div class="col-sm-6 mb-2">
+                                <strong>Package:</strong> {{ order.service_tier.title() }}
+                            </div>
+                            <div class="col-sm-6 mb-2">
+                                <strong>Amount:</strong> ${{ "%.2f"|format(order.total_amount) }}
+                            </div>
+                        </div>
+                        <div class="alert alert-info mt-3 mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Your order information has been saved. You can complete the payment later.
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Why did this happen? -->
+                    <div class="text-start mb-4">
+                        <h5 class="fw-bold mb-3">Why was my payment cancelled?</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-primary me-2"></i>
+                                You clicked the "Back" button during payment
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-primary me-2"></i>
+                                You closed the payment window
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-primary me-2"></i>
+                                The payment session expired
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-primary me-2"></i>
+                                There was a technical issue
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- What can I do now? -->
+                    <div class="alert alert-light border">
+                        <h6 class="fw-bold mb-2">
+                            <i class="fas fa-lightbulb text-warning me-2"></i>
+                            What can I do now?
+                        </h6>
+                        <p class="mb-0">
+                            Don't worry! You can try the payment process again or contact our support team if you need assistance.
+                        </p>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{{ url_for('order') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-redo me-2"></i>Try Again
+                        </a>
+                        <a href="{{ url_for('contact') }}" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-headset me-2"></i>Get Help
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                    </div>
+                    
+                    <!-- Support Information -->
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="fw-bold mb-2">Need Assistance?</h6>
+                        <p class="text-muted mb-2">
+                            Our support team is here to help you complete your order.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="mailto:support@resumeexpert.com" class="text-decoration-none">
+                                <i class="fas fa-envelope me-1"></i>support@resumeexpert.com
+                            </a>
+                            <a href="tel:+15551234567" class="text-decoration-none">
+                                <i class="fas fa-phone me-1"></i>(555) 123-4567
+                            </a>
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d
                         </div>
                     </div>
                 </div>
@@ -187,4 +288,25 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+=======
+
+<style>
+.cancel-icon i {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+</style>
+>>>>>>> ded7f2e4447248a018f7dd7d09de9c43eb09fa0d
 {% endblock %}
