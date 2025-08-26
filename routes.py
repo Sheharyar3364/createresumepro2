@@ -194,6 +194,12 @@ def register_routes(app):
             db.session.add(message)
             db.session.commit()
             
+            # Send notification email to admin
+            try:
+                send_contact_notification_email(message)
+            except Exception as e:
+                current_app.logger.error(f"Failed to send contact notification email: {e}")
+            
             flash('Thank you for your message. We will get back to you soon!', 'success')
             return redirect(url_for('contact'))
         
@@ -415,3 +421,57 @@ The Resume Service Team
 """
     
     mail.send(msg)
+
+def send_contact_notification_email(contact_message):
+    """Send notification email to admin when contact form is submitted"""
+    if not mail:
+        return
+    
+    admin_email = current_app.config.get('MAIL_USERNAME', 'admin@resumeexpert.com')
+    
+    msg = Message(
+        subject=f'New Contact Form Submission: {contact_message.subject or "General Inquiry"}',
+        recipients=[admin_email]
+    )
+    
+    msg.body = f"""
+New contact form submission received:
+
+Name: {contact_message.name}
+Email: {contact_message.email}
+Subject: {contact_message.subject or "General Inquiry"}
+
+Message:
+{contact_message.message}
+
+Submitted on: {contact_message.created_at.strftime('%Y-%m-%d %H:%M:%S')}
+
+Please respond to this inquiry promptly.
+
+---
+ResumeExpert Contact Form System
+"""
+    
+    # Also send auto-reply to customer
+    reply_msg = Message(
+        subject='Thank you for contacting ResumeExpert',
+        recipients=[contact_message.email]
+    )
+    
+    reply_msg.body = f"""
+Dear {contact_message.name},
+
+Thank you for reaching out to ResumeExpert! We have received your message and will get back to you within 24 hours.
+
+Your inquiry details:
+Subject: {contact_message.subject or "General Inquiry"}
+Message: {contact_message.message[:200]}{"..." if len(contact_message.message) > 200 else ""}
+
+If you have any urgent questions, please call us at (555) 123-4567.
+
+Best regards,
+The ResumeExpert Team
+"""
+    
+    mail.send(msg)
+    mail.send(reply_msg)

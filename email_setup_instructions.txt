@@ -1,0 +1,49 @@
+EMAIL SETUP INSTRUCTIONS FOR YOUR RESUME WRITING SERVICE
+=======================================================
+
+To receive contact form emails and send order notifications, you need to configure email settings:
+
+OPTION 1: Gmail SMTP (Recommended for testing)
+---------------------------------------------
+1. Go to your Gmail account settings
+2. Enable 2-factor authentication
+3. Generate an "App Password" for this application
+4. Add these environment variables to your Replit Secrets:
+
+   MAIL_USERNAME=your-gmail@gmail.com
+   MAIL_PASSWORD=your-app-password (16-character code from Gmail)
+   MAIL_DEFAULT_SENDER=your-gmail@gmail.com
+
+OPTION 2: Professional Email Service
+-----------------------------------
+For production, consider using:
+- SendGrid (up to 100 emails/day free)
+- Mailgun (first 5,000 emails/month free)
+- Amazon SES (very cheap)
+
+OPTION 3: Custom Domain Email
+---------------------------
+If you have a custom domain, use your hosting provider's SMTP settings:
+
+   MAIL_SERVER=mail.yourdomain.com
+   MAIL_PORT=587
+   MAIL_USERNAME=info@yourdomain.com
+   MAIL_PASSWORD=your-email-password
+   MAIL_DEFAULT_SENDER=info@yourdomain.com
+
+WHAT HAPPENS WHEN CONFIGURED:
+----------------------------
+✓ Customer fills contact form → You receive notification email
+✓ Customer fills contact form → Customer gets auto-reply confirmation
+✓ Customer places order → Customer gets order confirmation
+✓ Customer pays → Customer gets payment confirmation
+✓ You update order status → Customer gets status update
+
+CURRENT STATUS:
+--------------
+- Contact form saves to database ✓
+- Order system works ✓
+- Stripe payments work ✓
+- Email sending is configured but needs SMTP settings
+
+To test: Add the email environment variables above to your Replit Secrets, then try the contact form.
