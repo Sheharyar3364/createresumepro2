@@ -45,7 +45,7 @@ def create_app():
     app.config["MAIL_USE_SSL"] = False
     app.config["MAIL_USERNAME"] = "f37375f3b6e4f9"
     app.config["MAIL_PASSWORD"] = "0784b16e5f4274"
-    app.config["MAIL_DEFAULT_SENDER"] = "hello@resumeexpert.com"
+    app.config["MAIL_DEFAULT_SENDER"] = "hello@createproresume.com"
     app.config["ADMIN_EMAIL"] = "msheharyar2020@gmail.com"
     
     # Stripe configuration

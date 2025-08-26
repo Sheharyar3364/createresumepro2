@@ -352,7 +352,7 @@ Your order is currently pending payment. Once payment is completed, our professi
 We will keep you updated on the progress of your order.
 
 Best regards,
-The Resume Service Team
+The CreateProResume Team
 """
     
     mail.send(msg)
@@ -383,7 +383,7 @@ Expected Delivery: 3-5 business days
 You will receive email updates as your order progresses. If you have any questions, please don't hesitate to contact us.
 
 Best regards,
-The Resume Service Team
+The CreateProResume Team
 """
     
     mail.send(msg)
@@ -417,7 +417,7 @@ Order Details:
 {status_messages.get(order.status, 'Your order status has been updated.')}
 
 Best regards,
-The Resume Service Team
+The CreateProResume Team
 """
     
     mail.send(msg)
@@ -449,19 +449,19 @@ Submitted on: {contact_message.created_at.strftime('%Y-%m-%d %H:%M:%S')}
 Please respond to this inquiry promptly.
 
 ---
-ResumeExpert Contact Form System
+CreateProResume Contact Form System
 """
     
     # Also send auto-reply to customer
     reply_msg = Message(
-        subject='Thank you for contacting ResumeExpert',
+        subject='Thank you for contacting CreateProResume',
         recipients=[contact_message.email]
     )
     
     reply_msg.body = f"""
 Dear {contact_message.name},
 
-Thank you for reaching out to ResumeExpert! We have received your message and will get back to you within 24 hours.
+Thank you for reaching out to CreateProResume! We have received your message and will get back to you within 24 hours.
 
 Your inquiry details:
 Subject: {contact_message.subject or "General Inquiry"}
@@ -470,7 +470,7 @@ Message: {contact_message.message[:200]}{"..." if len(contact_message.message) >
 If you have any urgent questions, please call us at (555) 123-4567.
 
 Best regards,
-The ResumeExpert Team
+The CreateProResume Team
 """
     
     mail.send(msg)
