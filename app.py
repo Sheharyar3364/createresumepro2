@@ -38,13 +38,15 @@ def create_app():
     app.config["UPLOAD_FOLDER"] = "uploads"
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max file size
     
-    # Mail configuration
-    app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
-    app.config["MAIL_PORT"] = int(os.environ.get("MAIL_PORT", "587"))
+    # Mail configuration - Mailtrap for testing
+    app.config["MAIL_SERVER"] = "sandbox.smtp.mailtrap.io"
+    app.config["MAIL_PORT"] = 2525
     app.config["MAIL_USE_TLS"] = True
-    app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
-    app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
-    app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER", "noreply@resumeservice.com")
+    app.config["MAIL_USE_SSL"] = False
+    app.config["MAIL_USERNAME"] = "f37375f3b6e4f9"
+    app.config["MAIL_PASSWORD"] = "0784b16e5f4274"
+    app.config["MAIL_DEFAULT_SENDER"] = "hello@resumeexpert.com"
+    app.config["ADMIN_EMAIL"] = "msheharyar2020@gmail.com"
     
     # Stripe configuration
     app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_SECRET_KEY")

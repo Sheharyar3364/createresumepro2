@@ -427,7 +427,7 @@ def send_contact_notification_email(contact_message):
     if not mail:
         return
     
-    admin_email = current_app.config.get('MAIL_USERNAME', 'admin@resumeexpert.com')
+    admin_email = current_app.config.get('ADMIN_EMAIL', 'msheharyar2020@gmail.com')
     
     msg = Message(
         subject=f'New Contact Form Submission: {contact_message.subject or "General Inquiry"}',
