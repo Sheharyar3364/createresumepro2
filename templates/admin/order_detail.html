@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} - Admin Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+.order-header {
+    background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+}
+
+.file-download-btn {
+    transition: all 0.2s ease;
+}
+
+.file-download-btn:hover {
+    transform: scale(1.05);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Back Button -->
+    <div class="mb-3">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Order Header -->
+    <div class="order-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="fw-bold mb-2">Order #{{ order.id }}</h1>
+                <p class="mb-3 lead">{{ order.service.name }} - {{ order.service_tier.title() }} Package</p>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        Status: {{ order.status.replace('_', ' ').title() }}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        Payment: {{ order.payment_status.title() }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="display-6 fw-bold">${{ "%.2f"|format(order.total_amount) }}</div>
+                <small>Total Amount</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Customer Information -->
+        <div class="col-lg-6">
+            <div class="card info-card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-user me-2"></i>Customer Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Name:</div>
+                        <div class="col-sm-8">{{ order.full_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Email:</div>
+                        <div class="col-sm-8">
+                            <a href="mailto:{{ order.email }}" class="text-decoration-none">
+                                {{ order.email }}
+                            </a>
+                        </div>
+                    </div>
+                    {% if order.phone %}
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Phone:</div>
+                        <div class="col-sm-8">
+                            <a href="tel:{{ order.phone }}" class="text-decoration-none">
+                                {{ order.phone }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Order Date:</div>
+                        <div class="col-sm-8">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</div>
+                    </div>
+                    {% if order.completed_at %}
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Completed:</div>
+                        <div class="col-sm-8">{{ order.completed_at.strftime('%B %d, %Y at %I:%M %p') }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Information -->
+        <div class="col-lg-6">
+            <div class="card info-card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-briefcase me-2"></i>Career Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if order.current_position %}
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold">Current Position:</div>
+                        <div class="col-sm-7">{{ order.current_position }}</div>
+                    </div>
+                    {% endif %}
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold">Target Position:</div>
+                        <div class="col-sm-7">{{ order.target_position }}</div>
+                    </div>
+                    {% if order.industry %}
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold">Industry:</div>
+                        <div class="col-sm-7">{{ order.industry }}</div>
+                    </div>
+                    {% endif %}
+                    {% if order.experience_years %}
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold">Experience:</div>
+                        <div class="col-sm-7">{{ order.experience_years }} years</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Goals -->
+        {% if order.career_goals %}
+        <div class="col-12">
+            <div class="card info-card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-target me-2"></i>Career Goals & Objectives
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ order.career_goals }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Special Requirements -->
+        {% if order.special_requirements %}
+        <div class="col-12">
+            <div class="card info-card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>Special Requirements
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ order.special_requirements }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Uploaded Files -->
+        <div class="col-lg-6">
+            <div class="card info-card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-cloud-download-alt me-2"></i>Uploaded Files
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if order.uploaded_resume_path or order.uploaded_cover_letter_path or order.uploaded_job_description_path %}
+                        {% if order.uploaded_resume_path %}
+                        <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-pdf text-danger fa-2x me-3"></i>
+                                <div>
+                                    <div class="fw-bold">Resume</div>
+                                    <small class="text-muted">{{ order.uploaded_resume_path }}</small>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('admin_download_file', order_id=order.id, file_type='resume') }}" 
+                               class="btn btn-sm btn-primary file-download-btn">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if order.uploaded_cover_letter_path %}
+                        <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-alt text-info fa-2x me-3"></i>
+                                <div>
+                                    <div class="fw-bold">Cover Letter</div>
+                                    <small class="text-muted">{{ order.uploaded_cover_letter_path }}</small>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('admin_download_file', order_id=order.id, file_type='cover_letter') }}" 
+                               class="btn btn-sm btn-primary file-download-btn">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if order.uploaded_job_description_path %}
+                        <div class="d-flex align-items-center justify-content-between mb-3 p-3 bg-light rounded">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-text text-success fa-2x me-3"></i>
+                                <div>
+                                    <div class="fw-bold">Job Description</div>
+                                    <small class="text-muted">{{ order.uploaded_job_description_path }}</small>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('admin_download_file', order_id=order.id, file_type='job_description') }}" 
+                               class="btn btn-sm btn-primary file-download-btn">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
+                            <p class="mb-0">No files uploaded</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Management -->
+        <div class="col-lg-6">
+            <div class="card info-card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fas fa-cogs me-2"></i>Order Management
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('admin_update_order', order_id=order.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.status.label(class="form-label fw-bold") }}
+                            {{ form.status(class="form-select") }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.admin_notes.label(class="form-label fw-bold") }}
+                            {{ form.admin_notes(class="form-control") }}
+                            <small class="text-muted">Internal notes for tracking progress</small>
+                        </div>
+                        
+                        {{ form.submit(class="btn btn-success w-100") }}
+                    </form>
+                    
+                    {% if order.admin_notes %}
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="fw-bold mb-2">Current Notes:</h6>
+                        <p class="mb-0 small">{{ order.admin_notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

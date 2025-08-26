@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Professional Resume Writing Service - Get Hired Faster{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Land Your Dream Job with Professional Resume Writing</h1>
+                <p class="lead mb-4">Our expert writers craft compelling resumes, cover letters, and LinkedIn profiles that get you noticed by top employers and pass ATS systems.</p>
+                
+                <div class="d-flex flex-column flex-sm-row gap-3 mb-4">
+                    <a href="{{ url_for('order') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-rocket me-2"></i>Get Started Today
+                    </a>
+                    <a href="#services" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+                
+                <div class="row text-center mt-5">
+                    <div class="col-4">
+                        <h3 class="fw-bold">500+</h3>
+                        <small>Happy Clients</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="fw-bold">98%</h3>
+                        <small>Success Rate</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="fw-bold">3-5</h3>
+                        <small>Days Delivery</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 text-center">
+                <div class="hero-image-placeholder bg-white bg-opacity-10 rounded-3 p-5 mt-5 mt-lg-0">
+                    <i class="fas fa-file-alt fa-10x text-white opacity-75"></i>
+                    <h4 class="mt-3">Professional Resume Design</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark mb-3">Our Professional Services</h2>
+            <p class="lead text-muted">Choose from our comprehensive range of career services designed to boost your job search success</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Resume Writing -->
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm border-0 service-card">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Resume Writing</h4>
+                        <p class="text-muted mb-4">Professional, ATS-optimized resumes that highlight your strengths and achievements to get you noticed by recruiters.</p>
+                        <ul class="list-unstyled text-start">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>ATS-Optimized Format</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Industry-Specific Keywords</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Achievement-Focused Content</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Multiple Format Options</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cover Letter -->
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm border-0 service-card">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                            <i class="fas fa-envelope fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Cover Letter Writing</h4>
+                        <p class="text-muted mb-4">Compelling cover letters that tell your story and convince employers why you're the perfect fit for their role.</p>
+                        <ul class="list-unstyled text-start">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Personalized Content</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Company Research</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Persuasive Writing</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Professional Formatting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LinkedIn Profile -->
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm border-0 service-card">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                            <i class="fab fa-linkedin fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">LinkedIn Profile Optimization</h4>
+                        <p class="text-muted mb-4">Complete LinkedIn profile makeover to increase your visibility and attract recruiters in your industry.</p>
+                        <ul class="list-unstyled text-start">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Keyword Optimization</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Compelling Headline</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Professional Summary</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Experience Descriptions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark mb-3">Simple, Transparent Pricing</h2>
+            <p class="lead text-muted">Choose the package that best fits your career goals and budget</p>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <!-- Basic Package -->
+            <div class="col-lg-4">
+                <div class="card pricing-card border-0 shadow-sm h-100">
+                    <div class="card-header bg-light border-0 text-center py-4">
+                        <h4 class="fw-bold mb-2">Basic</h4>
+                        <div class="price-display">
+                            <span class="display-4 fw-bold text-primary">$99</span>
+                        </div>
+                        <p class="text-muted">Perfect for entry-level professionals</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Professional Resume</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>ATS-Optimized Format</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>1 Revision Round</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>PDF & Word Formats</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>3-5 Day Delivery</li>
+                        </ul>
+                        <a href="{{ url_for('order') }}" class="btn btn-outline-primary w-100">Choose Basic</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Standard Package -->
+            <div class="col-lg-4">
+                <div class="card pricing-card border-primary shadow h-100 position-relative">
+                    <div class="popular-badge bg-primary text-white">Most Popular</div>
+                    <div class="card-header bg-primary text-white border-0 text-center py-4">
+                        <h4 class="fw-bold mb-2">Standard</h4>
+                        <div class="price-display">
+                            <span class="display-4 fw-bold">$199</span>
+                        </div>
+                        <p class="mb-0">Best value for most professionals</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Professional Resume</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Custom Cover Letter</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>LinkedIn Profile Optimization</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>2 Revision Rounds</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Multiple Formats</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>2-4 Day Delivery</li>
+                        </ul>
+                        <a href="{{ url_for('order') }}" class="btn btn-primary w-100">Choose Standard</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Premium Package -->
+            <div class="col-lg-4">
+                <div class="card pricing-card border-0 shadow-sm h-100">
+                    <div class="card-header bg-light border-0 text-center py-4">
+                        <h4 class="fw-bold mb-2">Premium</h4>
+                        <div class="price-display">
+                            <span class="display-4 fw-bold text-primary">$299</span>
+                        </div>
+                        <p class="text-muted">Complete career transformation</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Professional Resume</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Custom Cover Letter</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>LinkedIn Profile Optimization</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Thank You Letter Template</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Unlimited Revisions</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>1-2 Day Rush Delivery</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>60-Day Follow-up Support</li>
+                        </ul>
+                        <a href="{{ url_for('order') }}" class="btn btn-outline-primary w-100">Choose Premium</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark mb-3">Why Choose ResumeExpert?</h2>
+            <p class="lead text-muted">We're committed to your career success with proven expertise and results</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Expert Writers</h5>
+                    <p class="text-muted">Certified professional writers with industry expertise and years of experience.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Fast Turnaround</h5>
+                    <p class="text-muted">Get your professionally written documents in 3-5 days or choose rush delivery.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">100% Satisfaction</h5>
+                    <p class="text-muted">We guarantee your satisfaction with unlimited revisions until you're happy.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                        <i class="fas fa-robot fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">ATS-Optimized</h5>
+                    <p class="text-muted">All our resumes are optimized to pass Applicant Tracking Systems (ATS).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold mb-3">Ready to Land Your Dream Job?</h2>
+                <p class="lead mb-4">Join thousands of satisfied clients who have successfully advanced their careers with our professional writing services.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ url_for('order') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-rocket me-2"></i>Get Started Now
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
