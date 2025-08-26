@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}My Dashboard - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Dashboard Header -->
+    <div class="dashboard-stats mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="h2 mb-2">
+                    <i class="fas fa-tachometer-alt me-2"></i>
+                    Welcome back, {{ user.username }}!
+                </h1>
+                <p class="mb-0 opacity-75">Manage your orders and track progress</p>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">{{ orders|length }}</div>
+                    <div>Total Orders</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                    <h5>Need a New Resume?</h5>
+                    <p class="text-muted">Choose from our professional packages</p>
+                    <a href="{{ url_for('services.pricing') }}" class="btn btn-primary">
+                        <i class="fas fa-shopping-cart me-2"></i>Order Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h5>Refer Friends</h5>
+                    <p class="text-muted">Earn money with our referral program</p>
+                    <a href="{{ url_for('referral.dashboard') }}" class="btn btn-success">
+                        <i class="fas fa-gift me-2"></i>View Referrals
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>My Orders
+                    </h5>
+                    {% if orders %}
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" class="form-control" id="orderSearch" placeholder="Search orders...">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% if orders %}
+                        <div class="row g-4">
+                            {% for order in orders %}
+                            <div class="col-lg-6">
+                                <div class="card order-card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-0">Order #{{ order.id }}</h6>
+                                            <small class="text-muted">{{ order.created_at.strftime('%B %d, %Y') }}</small>
+                                        </div>
+                                        <span class="badge {{ order.get_status_badge_class() }}">
+                                            {{ order.status.title() }}
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-sm-4">
+                                                <strong>Service:</strong>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                {{ order.get_service_display_name() }}
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-4">
+                                                <strong>Position:</strong>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                {{ order.target_position }}
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-4">
+                                                <strong>Amount:</strong>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <span class="text-success fw-bold">${{ "%.2f"|format(order.price) }}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if order.status in ['completed', 'delivered'] %}
+                                        <div class="alert alert-success" role="alert">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            Your documents are ready for download!
+                                        </div>
+                                        
+                                        <div class="row">
+                                            {% if order.completed_resume %}
+                                            <div class="col-6">
+                                                <a href="{{ url_for('dashboard.download_file', order_id=order.id, file_type='resume') }}" 
+                                                   class="btn btn-success btn-sm w-100">
+                                                    <i class="fas fa-download me-2"></i>Resume
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                            {% if order.completed_cover_letter %}
+                                            <div class="col-6">
+                                                <a href="{{ url_for('dashboard.download_file', order_id=order.id, file_type='cover_letter') }}" 
+                                                   class="btn btn-success btn-sm w-100">
+                                                    <i class="fas fa-download me-2"></i>Cover Letter
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        {% elif order.status == 'processing' %}
+                                        <div class="alert alert-info" role="alert">
+                                            <i class="fas fa-cogs me-2"></i>
+                                            Our expert writers are working on your order. You'll be notified when it's ready.
+                                        </div>
+                                        {% elif order.status == 'pending' %}
+                                        <div class="alert alert-warning" role="alert">
+                                            <i class="fas fa-clock me-2"></i>
+                                            Your order is pending. We'll start working on it soon.
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <div class="row align-items-center">
+                                            <div class="col-6">
+                                                <small>
+                                                    <i class="fas fa-envelope me-1"></i>
+                                                    {{ order.email }}
+                                                </small>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                {% if order.referral_used %}
+                                                <small class="text-success">
+                                                    <i class="fas fa-gift me-1"></i>
+                                                    Referral Applied
+                                                </small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-file-alt fa-4x text-muted mb-4"></i>
+                            <h4 class="text-muted">No Orders Yet</h4>
+                            <p class="text-muted mb-4">You haven't placed any orders yet. Start by choosing a package that fits your needs.</p>
+                            <a href="{{ url_for('services.pricing') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>Place Your First Order
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Information -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-user-circle me-2"></i>Account Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-4"><strong>Username:</strong></div>
+                        <div class="col-sm-8">{{ user.username }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4"><strong>Email:</strong></div>
+                        <div class="col-sm-8">{{ user.email }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4"><strong>Member Since:</strong></div>
+                        <div class="col-sm-8">{{ user.created_at.strftime('%B %Y') }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"><strong>Referral Code:</strong></div>
+                        <div class="col-sm-8">
+                            <code>{{ user.referral_code }}</code>
+                            <a href="{{ url_for('referral.dashboard') }}" class="btn btn-sm btn-outline-primary ms-2">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Order Statistics
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% set completed_orders = orders|selectattr("status", "equalto", "completed")|list %}
+                    {% set delivered_orders = orders|selectattr("status", "equalto", "delivered")|list %}
+                    {% set processing_orders = orders|selectattr("status", "equalto", "processing")|list %}
+                    
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="stat-number text-primary">{{ (completed_orders|length + delivered_orders|length) }}</div>
+                            <div class="small text-muted">Completed</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-number text-info">{{ processing_orders|length }}</div>
+                            <div class="small text-muted">In Progress</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-number text-success">{{ user.get_referral_count() }}</div>
+                            <div class="small text-muted">Referrals</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

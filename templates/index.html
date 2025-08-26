@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold">Land Your Dream Job with a Professional Resume</h1>
+                <p class="lead">Expert resume writers create compelling resumes that get noticed by employers and pass ATS systems. Professional, personalized, and proven to work.</p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('services.pricing') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-rocket me-2"></i>Get Started
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-comments me-2"></i>Free Consultation
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-award" style="font-size: 12rem; color: rgba(255,255,255,0.2);"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="h1 mb-4">Why Choose CreateProResume?</h2>
+                <p class="lead text-muted">We combine expert writing skills with industry knowledge to create resumes that stand out in today's competitive job market.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-users text-white" style="font-size: 1.8rem;"></i>
+                    </div>
+                    <h4>Expert Writers</h4>
+                    <p class="text-muted">Our team consists of certified resume writers with years of experience across various industries.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot text-white" style="font-size: 1.8rem;"></i>
+                    </div>
+                    <h4>ATS Optimized</h4>
+                    <p class="text-muted">All resumes are optimized to pass Applicant Tracking Systems used by 90% of employers.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock text-white" style="font-size: 1.8rem;"></i>
+                    </div>
+                    <h4>Fast Turnaround</h4>
+                    <p class="text-muted">Get your professional resume within 3-5 business days with our streamlined process.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Overview -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="h1 mb-4">Our Services</h2>
+                <p class="lead text-muted">Choose the package that best fits your career goals and budget.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card pricing-card h-100">
+                    <div class="card-header text-center">
+                        <h4>Basic Resume</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="price mb-3">$99</div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Professional resume rewrite</li>
+                            <li><i class="fas fa-check text-success me-2"></i>ATS optimization</li>
+                            <li><i class="fas fa-check text-success me-2"></i>2 rounds of revisions</li>
+                            <li><i class="fas fa-check text-success me-2"></i>PDF & Word formats</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('services.order', service_type='basic') }}" class="btn btn-primary w-100">
+                            Choose Basic
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card pricing-card featured h-100">
+                    <div class="card-header text-center">
+                        <h4>Standard Package</h4>
+                        <span class="badge bg-warning">Most Popular</span>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="price mb-3">$199</div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Everything in Basic</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Custom cover letter</li>
+                            <li><i class="fas fa-check text-success me-2"></i>LinkedIn profile optimization</li>
+                            <li><i class="fas fa-check text-success me-2"></i>3 rounds of revisions</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('services.order', service_type='standard') }}" class="btn btn-primary w-100">
+                            Choose Standard
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card pricing-card h-100">
+                    <div class="card-header text-center">
+                        <h4>Premium Package</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="price mb-3">$299</div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Everything in Standard</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Thank you letter template</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Interview preparation guide</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Unlimited revisions</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('services.order', service_type='premium') }}" class="btn btn-primary w-100">
+                            Choose Premium
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="h1 mb-4">What Our Clients Say</h2>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-quote-left text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <p class="mb-4">"The team at CreateProResume transformed my outdated resume into a modern, professional document. I got 3 interview calls within a week!"</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="bg-primary rounded-circle me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Sarah Johnson</h6>
+                                <small class="text-muted">Marketing Manager</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-quote-left text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <p class="mb-4">"Professional service, quick turnaround, and excellent results. My new resume helped me land a $20K salary increase!"</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="bg-primary rounded-circle me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Michael Chen</h6>
+                                <small class="text-muted">Software Engineer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-quote-left text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <p class="mb-4">"I was struggling to get interviews as a recent graduate. Their resume writing service was a game-changer for my job search!"</p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="bg-primary rounded-circle me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Emily Rodriguez</h6>
+                                <small class="text-muted">Business Analyst</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="h1 mb-4">Ready to Transform Your Career?</h2>
+                <p class="lead mb-4">Join thousands of professionals who have successfully landed their dream jobs with our expert resume writing services.</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{{ url_for('services.pricing') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-play me-2"></i>Get Started Now
+                    </a>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - CreateProResume{% endblock %}
+
+{% block content %}
+<!-- Contact Hero -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">Get in Touch</h1>
+                <p class="lead mb-0">Have questions about our services? We're here to help you succeed in your career journey.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Contact Form -->
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-light">
+                    <h3 class="mb-0">
+                        <i class="fas fa-envelope me-2"></i>Send us a Message
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control form-control-lg", placeholder="Your full name", required=True) }}
+                                {% for error in form.name.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.email.label(class="form-label") }}
+                                {{ form.email(class="form-control form-control-lg", placeholder="your.email@example.com", required=True) }}
+                                {% for error in form.email.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.subject.label(class="form-label") }}
+                            {{ form.subject(class="form-control form-control-lg", placeholder="What can we help you with?", required=True) }}
+                            {% for error in form.subject.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.message.label(class="form-label") }}
+                            {{ form.message(class="form-control", rows="6", placeholder="Tell us more about your question or how we can help...", required=True) }}
+                            {% for error in form.message.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Information -->
+        <div class="col-lg-4">
+            <div class="card border-0 mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-headset fa-3x text-primary mb-3"></i>
+                    <h5>Customer Support</h5>
+                    <p class="text-muted">We typically respond within 24 hours</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Contact Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <strong>Email</strong><br>
+                            <a href="mailto:support@createproresume.com">support@createproresume.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <strong>Phone</strong><br>
+                            <a href="tel:+15551234567">+1 (555) 123-4567</a>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>Business Hours</strong><br>
+                            Monday - Friday<br>
+                            9:00 AM - 6:00 PM EST
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-reply"></i>
+                        </div>
+                        <div>
+                            <strong>Response Time</strong><br>
+                            Within 24 hours<br>
+                            Usually much faster!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Quick Links -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>Quick Help
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('services.pricing') }}" class="list-group-item list-group-item-action border-0 px-0">
+                            <i class="fas fa-arrow-right me-2"></i>View Pricing & Services
+                        </a>
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard.customer') }}" class="list-group-item list-group-item-action border-0 px-0">
+                            <i class="fas fa-arrow-right me-2"></i>Check Order Status
+                        </a>
+                        {% endif %}
+                        <a href="{{ url_for('main.index') }}#faq" class="list-group-item list-group-item-action border-0 px-0">
+                            <i class="fas fa-arrow-right me-2"></i>Common Questions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Questions -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="accordion" id="contactFaqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq1">
+                                    How quickly will I get a response to my inquiry?
+                                </button>
+                            </h2>
+                            <div id="contactFaq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaqAccordion">
+                                <div class="accordion-body">
+                                    We aim to respond to all inquiries within 24 hours, but most messages are answered much faster. During business hours (9 AM - 6 PM EST), we typically respond within a few hours.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq2">
+                                    Can I speak with someone about my specific career situation?
+                                </button>
+                            </h2>
+                            <div id="contactFaq2" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
+                                <div class="accordion-body">
+                                    Absolutely! We offer free consultations to discuss your career goals and recommend the best package for your needs. Use the contact form or call us directly to schedule a consultation.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq3">
+                                    What if I need help after my order is completed?
+                                </button>
+                            </h2>
+                            <div id="contactFaq3" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
+                                <div class="accordion-body">
+                                    We're here to support you even after delivery! If you have questions about your documents or need minor adjustments, just reach out to us. We want to ensure your complete satisfaction.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq4">
+                                    Do you offer rush orders or expedited service?
+                                </button>
+                            </h2>
+                            <div id="contactFaq4" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
+                                <div class="accordion-body">
+                                    Yes, we can often accommodate rush orders depending on our current workload. Contact us directly to discuss expedited options and any additional fees that may apply.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

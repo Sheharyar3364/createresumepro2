@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Order {{ service_type.title() }} Package - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Service Summary -->
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        {{ service_type.title() }} Package Order
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="text-primary">${{ price }} - {{ service_type.title() }} Package</h5>
+                            {% if service_type == 'basic' %}
+                                <p class="mb-0">Professional resume rewrite, ATS optimization, 2 rounds of revisions</p>
+                            {% elif service_type == 'standard' %}
+                                <p class="mb-0">Everything in Basic + Cover letter + LinkedIn optimization + 3 revisions</p>
+                            {% else %}
+                                <p class="mb-0">Everything in Standard + Thank you letter + Interview guide + Unlimited revisions</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="h3 text-success mb-0">${{ price }}</div>
+                            <small class="text-muted">One-time payment</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Order Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('services.submit_order') }}" enctype="multipart/form-data" class="order-form needs-validation" novalidate>
+                        {{ form.hidden_tag() }}
+                        {{ form.service_type }}
+                        
+                        <!-- Personal Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-user me-2"></i>Personal Information
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.full_name.label(class="form-label") }}
+                                    {{ form.full_name(class="form-control", required=True) }}
+                                    {% for error in form.full_name.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.email.label(class="form-label") }}
+                                    {{ form.email(class="form-control", required=True) }}
+                                    {% for error in form.email.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.phone.label(class="form-label") }}
+                                    {{ form.phone(class="form-control", placeholder="Optional") }}
+                                    {% for error in form.phone.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-briefcase me-2"></i>Target Position Information
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.target_position.label(class="form-label") }}
+                                    {{ form.target_position(class="form-control", required=True, placeholder="e.g., Senior Software Engineer") }}
+                                    {% for error in form.target_position.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.industry.label(class="form-label") }}
+                                    {{ form.industry(class="form-select", required=True) }}
+                                    {% for error in form.industry.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.experience_level.label(class="form-label") }}
+                                    {{ form.experience_level(class="form-select", required=True) }}
+                                    {% for error in form.experience_level.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    {{ form.special_requirements.label(class="form-label") }}
+                                    {{ form.special_requirements(class="form-control", rows="3", placeholder="Any specific requirements, achievements to highlight, or additional information...") }}
+                                    {% for error in form.special_requirements.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- File Uploads -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-upload me-2"></i>Document Uploads <span class="text-muted small">(Optional but recommended)</span>
+                                </h6>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {{ form.resume_file.label(class="form-label") }}
+                                    <div class="file-upload-area">
+                                        {{ form.resume_file(class="form-control", accept=".pdf,.doc,.docx") }}
+                                        <div class="text-center mt-2">
+                                            <i class="fas fa-file-pdf fa-2x text-muted mb-2"></i>
+                                            <p class="text-muted small mb-0">PDF, DOC, DOCX</p>
+                                        </div>
+                                    </div>
+                                    {% for error in form.resume_file.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {{ form.cover_letter_file.label(class="form-label") }}
+                                    <div class="file-upload-area">
+                                        {{ form.cover_letter_file(class="form-control", accept=".pdf,.doc,.docx") }}
+                                        <div class="text-center mt-2">
+                                            <i class="fas fa-file-alt fa-2x text-muted mb-2"></i>
+                                            <p class="text-muted small mb-0">PDF, DOC, DOCX</p>
+                                        </div>
+                                    </div>
+                                    {% for error in form.cover_letter_file.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    {{ form.job_description_file.label(class="form-label") }}
+                                    <div class="file-upload-area">
+                                        {{ form.job_description_file(class="form-control", accept=".pdf,.doc,.docx,.txt") }}
+                                        <div class="text-center mt-2">
+                                            <i class="fas fa-file-text fa-2x text-muted mb-2"></i>
+                                            <p class="text-muted small mb-0">PDF, DOC, DOCX, TXT</p>
+                                        </div>
+                                    </div>
+                                    {% for error in form.job_description_file.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Referral Code -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.referral_code.label(class="form-label") }}
+                                    <div class="input-group">
+                                        {{ form.referral_code(class="form-control", placeholder="Enter referral code for 10% discount") }}
+                                        <span class="input-group-text">
+                                            <i class="fas fa-percentage text-warning" data-bs-toggle="tooltip" title="Save 10% with a valid referral code!"></i>
+                                        </span>
+                                    </div>
+                                    {% for error in form.referral_code.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Order Summary -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="mb-3">Order Summary</h6>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>{{ service_type.title() }} Package</span>
+                                            <span>${{ price }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2 text-success" id="discountRow" style="display: none !important;">
+                                            <span>Referral Discount (10%)</span>
+                                            <span>-$<span id="discountAmount">0</span></span>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between fw-bold">
+                                            <span>Total</span>
+                                            <span class="text-success">$<span id="totalAmount">{{ price }}</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-credit-card me-2"></i>Proceed to Payment
+                                    </button>
+                                </div>
+                                <p class="text-center text-muted small mt-3">
+                                    <i class="fas fa-lock me-1"></i>Secure payment processed by Stripe
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const basePrice = {{ price }};
+    const referralInput = document.querySelector('input[name="referral_code"]');
+    const totalAmountSpan = document.getElementById('totalAmount');
+    const discountAmountSpan = document.getElementById('discountAmount');
+    const discountRow = document.getElementById('discountRow');
+    
+    referralInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+            const discount = Math.round(basePrice * 0.1);
+            const total = basePrice - discount;
+            
+            discountAmountSpan.textContent = discount;
+            totalAmountSpan.textContent = total;
+            discountRow.style.display = 'flex';
+        } else {
+            totalAmountSpan.textContent = basePrice;
+            discountRow.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

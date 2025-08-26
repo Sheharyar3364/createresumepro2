@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Cancelled - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Cancellation Message -->
+            <div class="text-center mb-5">
+                <div class="bg-warning text-dark rounded-circle mx-auto d-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                    <i class="fas fa-times fa-3x"></i>
+                </div>
+                <h1 class="h2 text-warning mb-3">Payment Cancelled</h1>
+                <p class="lead text-muted">No worries! Your payment was cancelled and no charges were made to your account.</p>
+            </div>
+
+            {% if order %}
+            <!-- Order Information -->
+            <div class="card border-warning mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Cancelled Order Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <strong>Order Number:</strong> #{{ order.id }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Service:</strong> {{ order.get_service_display_name() }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Amount:</strong> 
+                                <span class="text-muted">${{ "%.2f"|format(order.price) }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <strong>Target Position:</strong> {{ order.target_position }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Industry:</strong> {{ order.industry.title() }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Status:</strong> 
+                                <span class="badge bg-secondary">Payment Cancelled</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if order.referral_used %}
+                    <div class="mt-3">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Don't worry!</strong> Your referral code <code>{{ order.referral_used }}</code> is still valid and you can use it when you're ready to place your order.
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Retry Options -->
+            <div class="card border-0">
+                <div class="card-body text-center p-4">
+                    <h5 class="mb-4">Ready to Try Again?</h5>
+                    <p class="text-muted mb-4">Your information has been saved. You can complete your order anytime!</p>
+                    
+                    <div class="row g-3">
+                        {% if order %}
+                        <div class="col-md-4">
+                            <a href="{{ url_for('services.order', service_type=order.service_type) }}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-redo fa-2x mb-2 d-block"></i>
+                                Retry Payment
+                                <small class="d-block">Complete your {{ order.service_type.title() }} order</small>
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-4">
+                            <a href="{{ url_for('services.pricing') }}" class="btn btn-outline-primary btn-lg w-100">
+                                <i class="fas fa-th-list fa-2x mb-2 d-block"></i>
+                                View All Packages
+                                <small class="d-block">Compare our services</small>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('main.contact') }}" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-comments fa-2x mb-2 d-block"></i>
+                                Contact Support
+                                <small class="d-block">Need help or have questions?</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Reasons -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>Common Reasons for Payment Cancellation
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>
+                                    Changed your mind (that's okay!)
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>
+                                    Want to review the details again
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>
+                                    Need to check with your employer
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>
+                                    Technical issue with payment
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>
+                                    Want to use a different payment method
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>
+                                    Need more time to decide
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Information -->
+            <div class="alert alert-info mt-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-headset fa-2x me-3"></i>
+                    <div>
+                        <h6 class="mb-1">Need Help?</h6>
+                        <p class="mb-0">If you experienced any technical issues or have questions about our services, please don't hesitate to contact our support team. We're here to help!</p>
+                        <div class="mt-2">
+                            <a href="{{ url_for('main.contact') }}" class="btn btn-sm btn-outline-info me-2">Contact Support</a>
+                            <a href="mailto:support@createproresume.com" class="btn btn-sm btn-outline-info">Email Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Us -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Why Choose CreateProResume?
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-users text-primary fa-2x mb-2"></i>
+                            <h6>Expert Writers</h6>
+                            <p class="text-muted small">Certified resume writers with industry experience</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-clock text-primary fa-2x mb-2"></i>
+                            <h6>Fast Delivery</h6>
+                            <p class="text-muted small">Get your professional resume in 3-5 business days</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-shield-alt text-primary fa-2x mb-2"></i>
+                            <h6>Satisfaction Guaranteed</h6>
+                            <p class="text-muted small">Multiple revisions until you're completely satisfied</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

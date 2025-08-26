@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block title %}Referral Dashboard - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Referral Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="h2 mb-3">
+                <i class="fas fa-users me-2"></i>Referral Dashboard
+            </h1>
+            <p class="lead text-muted">Earn money by referring friends to CreateProResume! Get 50% of the discount amount for each successful referral.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="earnings-card">
+                <div class="text-center">
+                    <div class="h2 mb-2">${{ "%.2f"|format(user.referral_earnings) }}</div>
+                    <div>Total Earnings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Code Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-code me-2"></i>Your Referral Code
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="mb-3">Share this code with friends to give them 10% off their first order:</p>
+                    <div class="referral-code-display" id="referralCode">
+                        {{ user.referral_code }}
+                    </div>
+                    <button class="btn btn-outline-primary" id="copyReferralCode">
+                        <i class="fas fa-copy me-2"></i>Copy Code
+                    </button>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            You earn 50% of the discount amount when someone uses your code
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-share-alt me-2"></i>Share Your Code
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">Share your referral code on social media:</p>
+                    <div class="d-grid gap-2">
+                        <a href="https://twitter.com/intent/tweet?text=I%20just%20got%20an%20amazing%20resume%20from%20CreateProResume!%20Use%20my%20referral%20code%20{{ user.referral_code }}%20for%2010%25%20off%20your%20first%20order!" 
+                           target="_blank" class="btn btn-outline-info">
+                            <i class="fab fa-twitter me-2"></i>Share on Twitter
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://createproresume.com&summary=Check%20out%20CreateProResume%20for%20professional%20resume%20writing!%20Use%20code%20{{ user.referral_code }}%20for%2010%25%20off!" 
+                           target="_blank" class="btn btn-outline-primary">
+                            <i class="fab fa-linkedin me-2"></i>Share on LinkedIn
+                        </a>
+                        <button class="btn btn-outline-success" onclick="copyReferralLink()">
+                            <i class="fas fa-link me-2"></i>Copy Referral Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 bg-primary text-white text-center">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h4>{{ user.get_referral_count() }}</h4>
+                    <p class="mb-0">Total Referrals</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-success text-white text-center">
+                <div class="card-body">
+                    <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+                    <h4>${{ "%.2f"|format(user.referral_earnings) }}</h4>
+                    <p class="mb-0">Total Earned</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-info text-white text-center">
+                <div class="card-body">
+                    <i class="fas fa-award fa-2x mb-2"></i>
+                    <h4>{{ rewards|length }}</h4>
+                    <p class="mb-0">Successful Orders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-warning text-dark text-center">
+                <div class="card-body">
+                    <i class="fas fa-percentage fa-2x mb-2"></i>
+                    <h4>10%</h4>
+                    <p class="mb-0">Discount Given</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral History -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-history me-2"></i>Referral History
+            </h5>
+        </div>
+        <div class="card-body">
+            {% if rewards %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Referred User</th>
+                            <th>Order Value</th>
+                            <th>Your Earnings</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reward in rewards %}
+                        <tr>
+                            <td>{{ reward.created_at.strftime('%m/%d/%Y') }}</td>
+                            <td>
+                                <div>{{ reward.referred.username }}</div>
+                                <small class="text-muted">{{ reward.referred.email }}</small>
+                            </td>
+                            <td>
+                                <span class="text-success fw-bold">${{ "%.2f"|format(reward.order.price) }}</span>
+                                <br><small class="text-muted">{{ reward.order.get_service_display_name() }}</small>
+                            </td>
+                            <td>
+                                <span class="text-success fw-bold">${{ "%.2f"|format(reward.reward_amount) }}</span>
+                            </td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if reward.paid else 'bg-warning' }}">
+                                    {{ 'Paid' if reward.paid else 'Pending' }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-user-friends fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted">No Referrals Yet</h4>
+                <p class="text-muted mb-4">Start sharing your referral code to earn money when friends place orders!</p>
+                <button class="btn btn-primary" id="copyReferralCode2">
+                    <i class="fas fa-copy me-2"></i>Copy Your Referral Code
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-question-circle me-2"></i>How Referrals Work
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 text-center mb-3">
+                    <div class="bg-primary text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold">1</span>
+                    </div>
+                    <h6>Share Your Code</h6>
+                    <p class="text-muted small">Give your unique referral code to friends and family.</p>
+                </div>
+                <div class="col-md-3 text-center mb-3">
+                    <div class="bg-primary text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold">2</span>
+                    </div>
+                    <h6>They Get Discount</h6>
+                    <p class="text-muted small">Your friends get 10% off their first order when they use your code.</p>
+                </div>
+                <div class="col-md-3 text-center mb-3">
+                    <div class="bg-primary text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold">3</span>
+                    </div>
+                    <h6>You Earn Money</h6>
+                    <p class="text-muted small">You earn 50% of the discount amount when they complete their order.</p>
+                </div>
+                <div class="col-md-3 text-center mb-3">
+                    <div class="bg-primary text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold">4</span>
+                    </div>
+                    <h6>Get Paid</h6>
+                    <p class="text-muted small">Your earnings are tracked and can be withdrawn once they reach $25.</p>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-3" role="alert">
+                <i class="fas fa-lightbulb me-2"></i>
+                <strong>Pro Tip:</strong> The more you share, the more you earn! There's no limit to how many people you can refer.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyReferralLink() {
+    const referralCode = '{{ user.referral_code }}';
+    const referralLink = `${window.location.origin}/auth/register?referral_code=${referralCode}`;
+    navigator.clipboard.writeText(referralLink).then(function() {
+        showNotification('Referral link copied to clipboard!', 'success');
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        alert('Failed to copy referral link. Please copy it manually: ' + referralLink);
+    });
+}
+
+// Additional copy button for empty state
+document.addEventListener('DOMContentLoaded', function() {
+    const copyBtn2 = document.getElementById('copyReferralCode2');
+    if (copyBtn2) {
+        copyBtn2.addEventListener('click', function() {
+            const referralCode = '{{ user.referral_code }}';
+            navigator.clipboard.writeText(referralCode).then(function() {
+                this.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-copy me-2"></i>Copy Your Referral Code';
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-primary');
+                }, 2000);
+            }.bind(this)).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy referral code. Please copy it manually.');
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

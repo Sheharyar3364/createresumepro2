@@ -1,0 +1,264 @@
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #64748b;
+    --success-color: #059669;
+    --warning-color: #d97706;
+    --danger-color: #dc2626;
+    --dark-color: #1e293b;
+    --light-color: #f8fafc;
+}
+
+/* Custom styles for the resume service */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 80px 0;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.feature-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.pricing-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-card.featured {
+    border: 3px solid var(--primary-color);
+    transform: scale(1.05);
+}
+
+.pricing-card .card-header {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.price {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.order-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.dashboard-stats {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    color: white;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.order-card {
+    border-left: 4px solid var(--primary-color);
+    transition: box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 50px;
+}
+
+.file-upload-area {
+    border: 2px dashed #e5e7eb;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+.file-upload-area:hover {
+    border-color: var(--primary-color);
+}
+
+.referral-code-display {
+    background: var(--light-color);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.earnings-card {
+    background: linear-gradient(135deg, var(--success-color) 0%, #34d399 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+.admin-sidebar {
+    background: var(--dark-color);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+.admin-sidebar .nav-link {
+    color: #cbd5e1;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.table-actions {
+    white-space: nowrap;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .pricing-card.featured {
+        transform: none;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .admin-sidebar {
+        min-height: auto;
+        padding: 1rem;
+    }
+}
+
+/* Dark theme compatibility */
+[data-bs-theme="dark"] .referral-code-display {
+    background: var(--bs-dark);
+    border-color: var(--bs-gray-600);
+    color: var(--bs-light);
+}
+
+[data-bs-theme="dark"] .file-upload-area {
+    border-color: var(--bs-gray-600);
+    background: var(--bs-gray-800);
+}
+
+[data-bs-theme="dark"] .file-upload-area:hover {
+    border-color: var(--bs-info);
+}
+
+/* Fix text contrast issues on light backgrounds */
+.bg-light, .bg-light * {
+    color: var(--dark-color) !important;
+}
+
+.bg-light h1, .bg-light h2, .bg-light h3, .bg-light h4, .bg-light h5, .bg-light h6 {
+    color: var(--dark-color) !important;
+}
+
+.bg-light p, .bg-light .text-muted {
+    color: #6c757d !important;
+}
+
+/* Ensure process section text is visible */
+.bg-light .text-center h2,
+.bg-light .text-center h5,
+.bg-light .text-center p {
+    color: var(--dark-color) !important;
+}
+
+/* Fix step numbers and content */
+.bg-light .bg-primary {
+    color: white !important;
+}
+
+/* Contact page text fixes */
+.bg-light .card-body,
+.bg-light .card-body * {
+    color: var(--dark-color) !important;
+}
+
+.bg-light .text-muted {
+    color: #6c757d !important;
+}
+
+/* Override any remaining text color issues */
+section.bg-light * {
+    color: var(--dark-color);
+}
+
+section.bg-light h1,
+section.bg-light h2,
+section.bg-light h3,
+section.bg-light h4,
+section.bg-light h5,
+section.bg-light h6 {
+    color: var(--dark-color) !important;
+}
+
+section.bg-light .text-muted {
+    color: #6c757d !important;
+}
+
+section.bg-light .bg-primary,
+section.bg-light .bg-primary * {
+    color: white !important;
+}

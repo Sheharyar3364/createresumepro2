@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful - CreateProResume{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Success Message -->
+            <div class="text-center mb-5">
+                <div class="bg-success text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                    <i class="fas fa-check fa-3x"></i>
+                </div>
+                <h1 class="h2 text-success mb-3">Payment Successful!</h1>
+                <p class="lead text-muted">Thank you for choosing CreateProResume. Your order has been received and we're excited to help you land your dream job!</p>
+            </div>
+
+            {% if order %}
+            <!-- Order Details -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-file-invoice me-2"></i>Order Confirmation
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">ORDER DETAILS</h6>
+                            <div class="mb-2">
+                                <strong>Order Number:</strong> #{{ order.id }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Service:</strong> {{ order.get_service_display_name() }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Amount Paid:</strong> 
+                                <span class="text-success fw-bold">${{ "%.2f"|format(order.price) }}</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Status:</strong> 
+                                <span class="badge bg-info">{{ order.status.title() }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">CUSTOMER INFORMATION</h6>
+                            <div class="mb-2">
+                                <strong>Name:</strong> {{ order.full_name }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Email:</strong> {{ order.email }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Target Position:</strong> {{ order.target_position }}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Industry:</strong> {{ order.industry.title() }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if order.referral_used %}
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-gift me-2"></i>
+                        <strong>Referral Applied!</strong> You saved ${{ "%.2f"|format(order.referral_discount) }} with referral code <code>{{ order.referral_used }}</code>
+                    </div>
+                    {% endif %}
+
+                    <div class="bg-light p-3 rounded">
+                        <h6 class="mb-2">What happens next?</h6>
+                        <ol class="mb-0">
+                            <li>You'll receive a confirmation email within a few minutes</li>
+                            <li>Our expert writers will begin working on your order within 24 hours</li>
+                            <li>We'll keep you updated on the progress via email</li>
+                            <li>Your completed documents will be available for download in 3-5 business days</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Next Steps -->
+            <div class="card border-0">
+                <div class="card-body text-center p-4">
+                    <h5 class="mb-4">What Would You Like to Do Next?</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a href="{{ url_for('dashboard.customer') }}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-tachometer-alt fa-2x mb-2 d-block"></i>
+                                View Dashboard
+                                <small class="d-block">Track your order progress</small>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('referral.dashboard') }}" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-users fa-2x mb-2 d-block"></i>
+                                Refer Friends
+                                <small class="d-block">Earn money with referrals</small>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('main.contact') }}" class="btn btn-info btn-lg w-100">
+                                <i class="fas fa-comments fa-2x mb-2 d-block"></i>
+                                Contact Us
+                                <small class="d-block">Have questions?</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Confirmation Note -->
+            <div class="alert alert-info mt-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-envelope fa-2x me-3"></i>
+                    <div>
+                        <h6 class="mb-1">Check Your Email</h6>
+                        <p class="mb-0">A confirmation email with your order details has been sent to {{ order.email if order else 'your email address' }}. If you don't see it in a few minutes, please check your spam folder.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Details -->
+            {% if order %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-list-check me-2"></i>Your {{ order.service_type.title() }} Package Includes:
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if order.service_type == 'basic' %}
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Professional resume rewrite</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>ATS optimization</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>2 rounds of revisions</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>PDF & Word formats</li>
+                        <li><i class="fas fa-check text-success me-2"></i>3-5 business day delivery</li>
+                    </ul>
+                    {% elif order.service_type == 'standard' %}
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Everything in Basic package</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Custom cover letter</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>LinkedIn profile optimization</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>3 rounds of revisions</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Industry-specific keywords</li>
+                    </ul>
+                    {% else %}
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Everything in Standard package</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Thank you letter template</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Interview preparation guide</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Unlimited revisions</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Priority support</li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
