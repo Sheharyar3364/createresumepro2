@@ -39,23 +39,73 @@
 
 .pricing-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: white;
+    position: relative;
+    overflow: hidden;
 }
 
 .pricing-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border-color: var(--primary-color);
 }
 
 .pricing-card.featured {
     border: 3px solid var(--primary-color);
-    transform: scale(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
+}
+
+.pricing-card.featured:hover {
+    transform: scale(1.02) translateY(-8px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3);
 }
 
 .pricing-card .card-header {
     background: var(--primary-color);
     color: white;
+    font-weight: 600;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+}
+
+.pricing-card .card-body {
+    background: white;
+    padding: 2rem 1.5rem;
+    color: #333;
+}
+
+.pricing-card .card-footer {
+    background: white;
+    border: none;
+    padding: 1.5rem;
+}
+
+/* Ensure all pricing card text is visible */
+.pricing-card h4,
+.pricing-card h5,
+.pricing-card p,
+.pricing-card li,
+.pricing-card .price {
+    color: #333 !important;
+}
+
+.pricing-card .text-muted {
+    color: #6c757d !important;
+}
+
+.pricing-card .text-success {
+    color: #198754 !important;
+}
+
+/* Featured badge styling */
+.pricing-card .badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
     font-weight: 600;
 }
 

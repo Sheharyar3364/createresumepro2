@@ -102,6 +102,8 @@ def register():
         
         # Create user
         user = User(
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
             username=form.username.data,
             email=form.email.data,
             password_hash=generate_password_hash(form.password.data),
@@ -143,6 +145,11 @@ def order(service_type):
     
     form = OrderForm()
     form.service_type.data = service_type
+    
+    # Pre-fill form with user data
+    if current_user:
+        form.full_name.data = current_user.get_full_name()
+        form.email.data = current_user.email
     
     return render_template('services/order.html', form=form, service_type=service_type, price=pricing[service_type])
 
